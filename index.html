@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título de la pestaña del navegador (lo cambiaremos con JS) -->
+    <title>Un Momento de SenDo</title>
+
+    <!-- Meta Tags de Open Graph para vistas previas en redes sociales -->
+    <meta property="og:title" content="Un Momento de SenDo" />
+    <meta property="og:description" content="Una experiencia de calma compartida contigo." />
+    <meta property="og:image" content="" /> <!-- JS rellenará esto con la URL de la imagen -->
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Enlace a nuestra hoja de estilos -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- (Opcional) Enlace a fuentes de Google Fonts si las necesitamos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- El Contenedor Principal del Momento (la imagen de fondo) -->
+    <main id="moment-container">
+        
+        <!-- El Velo de Bienvenida (inicialmente oculto) -->
+        <div id="welcome-overlay" class="overlay">
+            <h1>Un Momento para ti</h1>
+            <p>Tu amigo ha compartido contigo una experiencia de calma de SenDo. Pulsa 'Play' para escuchar la música y disfruta de este instante.</p>
+            <button id="welcome-ok-button">Entendido</button>
+        </div>
+
+        <!-- El Velo de Sugerencia de Auriculares (inicialmente oculto) -->
+        <div id="headphone-overlay" class="overlay">
+            <p>Para una mejor experiencia, te recomendamos usar auriculares.</p>
+            <button id="play-anyway-button">Reproducir Audio</button>
+            <button id="play-silent-button">Continuar en Silencio</button>
+        </div>
+
+        <!-- El Contenido del Momento (frase, autor, etc.) -->
+        <div id="moment-content">
+            <h2 id="phrase-text"></h2>
+            <p id="author-text"></p>
+        </div>
+
+        <!-- El Reproductor de Audio Minimalista -->
+        <div id="audio-player">
+            <button id="play-pause-button"></button>
+            <audio id="moment-audio" src=""></audio>
+        </div>
+
+    </main>
+
+    <!-- La Barra Flotante de Llamada a la Acción (CTA) -->
+    <div id="cta-bar">
+        <div id="cta-text">
+            <p>Esto es un Momento creado con SenDo, una app gratuita para encontrar tu calma diaria.</p>
+        </div>
+        <div id="cta-button">
+            <!-- Usaremos una imagen para la insignia oficial de Google Play -->
+            <a id="download-link" href="#" target="_blank">
+                <img src="URL_DE_LA_INSIGNIA_DE_GOOGLE_PLAY" alt="Obtener en Google Play">
+            </a>
+        </div>
+    </div>
+
+    <!-- El Zócalo Respetuoso para la Publicidad -->
+    <footer id="ad-footer">
+        <div id="ad-container">
+            <!-- El script de AdSense llenará este espacio -->
+        </div>
+        <button id="close-ad-button">×</button>
+    </footer>
+
+    <!-- Enlace a nuestro archivo de JavaScript (siempre al final del body) -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
