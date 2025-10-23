@@ -1,39 +1,38 @@
-// EN: assets/js/script.js
+// EN: recursos/js/script.js
 
-// --- PARTE 1: LECTURA DE DATOS Y ACTUALIZACIÓN DE META TAGS (Se ejecuta inmediatamente) ---
+// --- PARTE 1: ACCIÓN INMEDIATA (Para ganar la carrera contra el bot) ---
+// Este código se ejecuta tan pronto como el navegador lee el script en el <head>.
 
-const urlParams = new URLSearchParams(window.location.search);
-
-// Función auxiliar robusta para leer parámetros de la URL
+// Función auxiliar para leer y decodificar parámetros de la URL de forma segura.
 function getDecodedParam(paramName, defaultValue = '') {
-    const value = urlParams.get(paramName);
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get(paramName);
     if (value === null || value === 'null' || value === undefined) {
         return defaultValue;
     }
     return decodeURIComponent(value);
 }
 
-// Leemos todos los datos una sola vez al principio.
-const imageUrl = getDecodedParam('img');
-const musicUrl = getDecodedParam('music');
-const phrase = getDecodedParam('phrase', 'Encuentra tu momento de calma.');
-const author = getDecodedParam('author', 'SenDo');
-const songTitle = getDecodedParam('songTitle', 'Pista Curada');
-const songArtist = getDecodedParam('songArtist', 'SenDo Community');
-const imgPhotographer = getDecodedParam('imgPhotographer', 'SenDo Community');
-const songArtistUrl = getDecodedParam('songArtistUrl');
-const imgPhotographerUrl = getDecodedParam('imgPhotographerUrl');
+// Leemos los datos necesarios para los meta tags inmediatamente.
+const metaImageUrl = getDecodedParam('img');
+const metaPhrase = getDecodedParam('phrase', 'Un Momento de SenDo');
+const metaAuthor = getDecodedParam('author', 'SenDo');
 
-// Actualizamos los meta tags cruciales para la vista previa en redes sociales.
-if (phrase && imageUrl) {
-    document.title = `"${phrase}" - Un Momento de SenDo`;
-    document.querySelector("meta[property='og:title']").setAttribute('content', `"${phrase}"`);
-    document.querySelector("meta[property='og:image']").setAttribute('content', imageUrl);
-    document.querySelector("meta[property='og:description']").setAttribute('content', `Un Momento de calma de ${author}.`);
+// Actualizamos los tags en el <head> AHORA MISMO.
+if (metaPhrase && metaImageUrl) {
+    document.title = `"${metaPhrase}"`;
+    // Usamos 'try...catch' como medida de seguridad por si el HTML cambiara.
+    try {
+        document.querySelector("meta[property='og:title']").setAttribute('content', `"${metaPhrase}"`);
+        document.querySelector("meta[property='og:image']").setAttribute('content', metaImageUrl);
+        document.querySelector("meta[property='og:description']").setAttribute('content', `Un Momento de calma de ${metaAuthor}.`);
+    } catch (e) {
+        console.error("Error al actualizar meta tags:", e);
+    }
 }
 
 
-// --- PARTE 2: LÓGICA PRINCIPAL (Espera a que los elementos del <body> existan) ---
+// --- PARTE 2: ACCIÓN DIFERIDA (Espera a que el <body> esté listo) ---
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -55,17 +54,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicTitleText = document.getElementById('music-title');
     const musicArtistText = document.getElementById('music-artist');
     const phraseAuthorText = document.getElementById('phrase-author');
+    
+    // Leemos el resto de los datos (ya decodificados por la función de arriba)
+    const musicUrl = getDecodedParam('music');
+    const songTitle = getDecodedParam('songTitle', 'Pista Curada');
+    const songArtist = getDecodedParam('songArtist', 'SenDo Community');
+    const imgPhotographer = getDecodedParam('imgPhotographer', 'SenDo Community');
+    const songArtistUrl = getDecodedParam('songArtistUrl');
+    const imgPhotographerUrl = getDecodedParam('imgPhotographerUrl');
 
-    // 2. PUESTA EN ESCENA (Usamos las variables ya leídas)
-    if (imageUrl) momentContainer.style.backgroundImage = `url(${imageUrl})`;
-    phraseText.textContent = `"${phrase}"`;
-    authorText.textContent = `- ${author}`;
+    // 2. PUESTA EN ESCENA (Rellenar el <body>)
+    if (metaImageUrl) momentContainer.style.backgroundImage = `url(${metaImageUrl})`;
+    phraseText.textContent = `"${metaPhrase}"`;
+    authorText.textContent = `- ${metaAuthor}`;
     downloadLink.href = 'https://play.google.com/store/apps/details?id=com.tu.paquete.sendo';
 
     photoArtistText.textContent = `de ${imgPhotographer}`;
     musicTitleText.textContent = `"${songTitle}"`;
     musicArtistText.textContent = `de ${songArtist}`;
-    phraseAuthorText.textContent = `de ${author}`;
+    phraseAuthorText.textContent = `de ${metaAuthor}`;
 
     if (imgPhotographerUrl) {
         photoArtistText.innerHTML = `de <a href="${imgPhotographerUrl}" target="_blank" rel="noopener noreferrer">${imgPhotographer}</a>`;
@@ -121,13 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     document.body.addEventListener('click', (event) => {
-        // Cierra el panel de atribución si se hace clic fuera de él
         if (attributionPanel.classList.contains('visible') && !attributionPanel.contains(event.target) && !attributionButton.contains(event.target)) {
             attributionPanel.classList.remove('visible');
         }
     });
 
-    // Lógica de anuncios
     setTimeout(() => {
         if (adFooter) adFooter.style.transform = 'translateY(0%)';
     }, 5000);
