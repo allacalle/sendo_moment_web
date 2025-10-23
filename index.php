@@ -27,7 +27,7 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- El resto de su <head> no cambia -->
-    <link rel="stylesheet" href="recursos/css/style.css"> 
+    <link rel="stylesheet" href="recursos/css/styles.css"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
