@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Meta tags estáticos -->
+    <title>Un Momento de SenDo</title>
+    <meta property="og:title" content="Un Momento de SenDo" />
+    <meta property="og:description" content="Un Momento de calma de SenDo." />
+    <meta property="og:image" content="" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="recursos/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<main id="moment-container">
+
+    <div id="headphone-overlay" class="overlay">
+        <div class="overlay-content">
+            <p>Para una mejor experiencia, te recomendamos usar auriculares.</p>
+            <button id="play-anyway-button">Reproducir Audio</button>
+            <button id="play-silent-button">Continuar en Silencio</button>
+        </div>
+    </div>
+
+    <div id="moment-content">
+        <h2 id="phrase-text"></h2>
+        <p id="author-text"></p>
+    </div>
+
+    <div id="on-screen-controls">
+        <div id="attribution-panel">
+            <h3>Sobre los Artistas</h3>
+            <div><h4>Fotografía</h4><p id="photo-artist"></p><p class="via-text">vía Pexels</p></div>
+            <div><h4>Música</h4><p id="music-title"></p><p id="music-artist"></p><p class="via-text">vía Jamendo</p></div>
+            <div><h4>Frase</h4><p id="phrase-author"></p></div>
+        </div>
+        <div id="bottom-buttons-row">
+            <div id="attribution-button"><img src="recursos/images/attribution.webp" alt="Sobre los Artistas"></div>
+            <div id="audio-player"><button id="play-pause-button"></button><audio id="moment-audio" src=""></audio></div>
+            <div class="button-spacer"></div>
+        </div>
+    </div>
+</main>
+
+<div id="cta-bar">
+    <div id="cta-text"><p>Esto es un Momento creado con <strong>SenDo</strong>, una app gratuita para encontrar tu calma diaria.</p></div>
+    <div id="cta-button"><a id="download-link" href="#" target="_blank"><img src="recursos/images/googleplay.webp" alt="Obtener en Google Play"></a></div>
+</div>
+
+<footer id="ad-footer">
+    <div id="ad-container"></div>
+    <button id="close-ad-button">×</button>
+</footer>
+
+<!-- Script para manejar parámetros de URL -->
+<script>
+    // Lee parámetros de la URL
+    const params = new URLSearchParams(window.location.search);
+    const imageUrl = params.get('img') || '';
+    const phrase = params.get('phrase') || 'Un Momento de SenDo';
+    const author = params.get('author') || 'SenDo';
+
+    // Actualiza el contenido de la página
+    document.getElementById('phrase-text').textContent = phrase;
+    document.getElementById('author-text').textContent = author;
+    document.getElementById('phrase-author').textContent = author;
+    document.getElementById('moment-audio').src = params.get('audio') || '';
+
+    // Puedes añadir código para mostrar la imagen si la necesitas
+    // Ejemplo: si quieres una imagen de fondo dinámico
+    if(imageUrl){
+        document.getElementById('moment-container').style.backgroundImage = `url(${imageUrl})`;
+    }
+</script>
+
+<script src="recursos/js/script.js"></script>
+</body>
+</html>
