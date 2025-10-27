@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Meta tags por defecto (fallback para bots) -->
+    <!-- Meta tags estáticos de fallback -->
     <title>Un Momento de SenDo</title>
     <meta property="og:title" content="Un Momento de SenDo" />
     <meta property="og:description" content="Una experiencia de calma compartida contigo." />
@@ -21,13 +21,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Script para actualizar meta tags dinámicamente desde parámetros -->
+    <!-- Script para actualizar meta tags y contenido dinámicamente -->
     <script>
         const params = new URLSearchParams(window.location.search);
         const phrase = params.get('phrase');
         const img = params.get('img');
         const author = params.get('author');
+        const music = params.get('music');
+        const songTitle = params.get('songTitle');
+        const songArtist = params.get('songArtist');
+        const imgPhotographer = params.get('imgPhotographer');
+        const imgPhotographerUrl = params.get('imgPhotographerUrl');
+        const songArtistUrl = params.get('songArtistUrl');
 
+        // Función para actualizar o crear meta tags
         function setMeta(property, content, name=false) {
             let selector = name ? `meta[name="${property}"]` : `meta[property="${property}"]`;
             let meta = document.querySelector(selector);
@@ -40,6 +47,7 @@
             meta.setAttribute('content', content);
         }
 
+        // Actualizar meta tags para bots
         if (phrase) {
             setMeta('og:title', phrase);
             setMeta('og:description', phrase);
@@ -60,7 +68,7 @@
         }
     </script>
 
-    <!-- El script principal de tu app -->
+    <!-- Tu script principal -->
     <script src="recursos/js/script.js"></script>
 </head>
 <body>
@@ -76,14 +84,27 @@
         <div id="moment-content">
             <h2 id="phrase-text"></h2>
             <p id="author-text"></p>
+            <div id="preview-image"></div>
         </div>
 
         <div id="on-screen-controls">
             <div id="attribution-panel">
                 <h3>Sobre los Artistas</h3>
-                <div><h4>Fotografía</h4><p id="photo-artist"></p><p class="via-text">vía Pexels</p></div>
-                <div><h4>Música</h4><p id="music-title"></p><p id="music-artist"></p><p class="via-text">vía Jamendo</p></div>
-                <div><h4>Frase</h4><p id="phrase-author"></p></div>
+                <div>
+                    <h4>Fotografía</h4>
+                    <p id="photo-artist"></p>
+                    <p class="via-text">vía Pexels</p>
+                </div>
+                <div>
+                    <h4>Música</h4>
+                    <p id="music-title"></p>
+                    <p id="music-artist"></p>
+                    <p class="via-text">vía Jamendo</p>
+                </div>
+                <div>
+                    <h4>Frase</h4>
+                    <p id="phrase-author"></p>
+                </div>
             </div>
             <div id="bottom-buttons-row">
                 <div id="attribution-button"><img src="recursos/images/attribution.webp" alt="Sobre los Artistas"></div>
@@ -94,13 +115,47 @@
     </main>
 
     <div id="cta-bar">
-        <div id="cta-text"><p>Esto es un Momento creado con <strong>SenDo</strong>, una app gratuita para encontrar tu calma diaria.</p></div>
-        <div id="cta-button"><a id="download-link" href="#" target="_blank"><img src="recursos/images/googleplay.webp" alt="Obtener en Google Play"></a></div>
+        <div id="cta-text">
+            <p>Esto es un Momento creado con <strong>SenDo</strong>, una app gratuita para encontrar tu calma diaria.</p>
+        </div>
+        <div id="cta-button">
+            <a id="download-link" href="#" target="_blank">
+                <img src="recursos/images/googleplay.webp" alt="Obtener en Google Play">
+            </a>
+        </div>
     </div>
 
     <footer id="ad-footer">
         <div id="ad-container"></div>
         <button id="close-ad-button">×</button>
     </footer>
+
+    <!-- Script para mostrar contenido dinámico -->
+    <script>
+        // Frase y autor
+        document.getElementById('phrase-text').textContent = phrase || 'Respira y sonríe 🌿';
+        document.getElementById('author-text').textContent = author ? `— ${author}` : '';
+
+        // Imagen del momento
+        if(img) {
+            const imgEl = document.createElement('img');
+            imgEl.src = img;
+            imgEl.alt = 'Momento de calma';
+            imgEl.style.maxWidth = '80%';
+            imgEl.style.borderRadius = '10px';
+            document.getElementById('preview-image').appendChild(imgEl);
+        }
+
+        // Música
+        if(music && songTitle && songArtist) {
+            document.getElementById('music-title').textContent = songTitle;
+            document.getElementById('music-artist').textContent = songArtist;
+        }
+
+        // Créditos de fotografía y música
+        if(imgPhotographer) document.getElementById('photo-artist').textContent = imgPhotographerUrl ? `${imgPhotographer} (${imgPhotographerUrl})` : imgPhotographer;
+        if(songArtist) document.getElementById('music-artist').textContent += songArtistUrl ? ` (${songArtistUrl})` : '';
+        if(phrase) document.getElementById('phrase-author').textContent = author || '';
+    </script>
 </body>
 </html>
