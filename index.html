@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Meta tags estáticos de fallback, serán actualizados por el script -->
+    
     <title>Un Momento de SenDo</title>
     <meta property="og:title" content="Un Momento de SenDo" />
     <meta property="og:description" content="Una experiencia de calma compartida contigo." />
-    <meta property="og:image" content="" />
+    <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Enlaces a CSS y Fonts -->
-    <link rel="stylesheet" href="recursos/css/styles.css">
+    <link rel="stylesheet" href="recursos/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- El script se mueve al final del <head> para la actualización rápida de meta tags -->
-    <script src="recursos/js/script.js"></script>
+    <!-- Script principal -->
+    <script src="recursos/js/script.js" defer></script>
 </head>
 <body>
 
@@ -41,21 +40,45 @@
         <div id="on-screen-controls">
             <div id="attribution-panel">
                 <h3>Sobre los Artistas</h3>
-                <div><h4>Fotografía</h4><p id="photo-artist"></p><p class="via-text">vía Pexelso</p></div>
-                <div><h4>Música</h4><p id="music-title"></p><p id="music-artist"></p><p class="via-text">vía Jamendo</p></div>
-                <div><h4>Frase</h4><p id="phrase-author"></p></div>
+                <div>
+                    <h4>Fotografía</h4>
+                    <p id="photo-artist"></p>
+                    <p class="via-text">vía Pexels</p>
+                </div>
+                <div>
+                    <h4>Música</h4>
+                    <p id="music-title"></p>
+                    <p id="music-artist"></p>
+                    <p class="via-text">vía Jamendo</p>
+                </div>
+                <div>
+                    <h4>Frase</h4>
+                    <p id="phrase-author"></p>
+                </div>
             </div>
+
             <div id="bottom-buttons-row">
-                <div id="attribution-button"><img src="recursos/images/attribution.webp" alt="Sobre los Artistas"></div>
-                <div id="audio-player"><button id="play-pause-button"></button><audio id="moment-audio" src=""></audio></div>
+                <div id="attribution-button">
+                    <img src="recursos/images/attribution.webp" alt="Sobre los Artistas">
+                </div>
+                <div id="audio-player">
+                    <button id="play-pause-button"></button>
+                    <audio id="moment-audio" src=""></audio>
+                </div>
                 <div class="button-spacer"></div>
             </div>
         </div>
     </main>
 
     <div id="cta-bar">
-        <div id="cta-text"><p>Esto es un Momento creado con <strong>SenDo</strong>, una app gratuita para encontrar tu calma diaria.</p></div>
-        <div id="cta-button"><a id="download-link" href="#" target="_blank"><img src="recursos/images/googleplay.webp" alt="Obtener en Google Play"></a></div>
+        <div id="cta-text">
+            <p>Esto es un Momento creado con <strong>SenDo</strong>, una app gratuita para encontrar tu calma diaria.</p>
+        </div>
+        <div id="cta-button">
+            <a id="download-link" href="#" target="_blank">
+                <img src="recursos/images/googleplay.webp" alt="Obtener en Google Play">
+            </a>
+        </div>
     </div>
 
     <footer id="ad-footer">
@@ -63,6 +86,5 @@
         <button id="close-ad-button">×</button>
     </footer>
 
-    <!-- El script ya no va aquí, se ha movido al <head> -->
 </body>
 </html>

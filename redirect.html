@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cargando Momento de SenDo...</title>
+    <!-- Este script se ejecuta instantáneamente para rellenar los meta tags -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const img = params.get('img');
+        const phrase = params.get('phrase');
+
+        if (img) {
+            document.write(`<meta property="og:image" content="${img}">`);
+        }
+        if (phrase) {
+            document.write(`<meta property="og:title" content="${phrase}">`);
+        }
+        
+        // Añadimos tags estáticos importantes que se pierden con document.write
+        document.write('<meta property="og:type" content="website">');
+        document.write('<meta name="twitter:card" content="summary_large_image">');
+    </script>
+</head>
+<body>
+    <p style="font-family: sans-serif; text-align: center; margin-top: 20%;">Cargando tu Momento de calma...</p>
+    
+    <!-- Este script redirige al usuario humano a la página principal -->
+    <script>
+        window.location.href = 'index.html' + window.location.search;
+    </script>
+</body>
+</html>
