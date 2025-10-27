@@ -1,115 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Momento de calma 🌿 | SenDo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Meta tags por defecto para bots (si no hay parámetros) -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Un Momento de calma 🌿">
-  <meta property="og:description" content="Disfruta un instante de serenidad compartido desde la app SenDo.">
-  <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png">
-  <meta property="og:image:alt" content="Logo de SenDo">
-  <meta property="og:site_name" content="SenDo">
+    <!-- Meta tags por defecto (fallback para bots) -->
+    <title>Un Momento de SenDo</title>
+    <meta property="og:title" content="Un Momento de SenDo" />
+    <meta property="og:description" content="Una experiencia de calma compartida contigo." />
+    <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Un Momento de SenDo" />
+    <meta name="twitter:description" content="Una experiencia de calma compartida contigo." />
+    <meta name="twitter:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png" />
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Un Momento de calma 🌿">
-  <meta name="twitter:description" content="Disfruta un instante de serenidad compartido desde la app SenDo.">
-  <meta name="twitter:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png">
-  <meta name="twitter:image:alt" content="Logo de SenDo">
+    <!-- Enlaces a CSS y Fonts -->
+    <link rel="stylesheet" href="recursos/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="recursos/css/styles.css">
+    <!-- Script para actualizar meta tags dinámicamente desde parámetros -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const phrase = params.get('phrase');
+        const img = params.get('img');
+        const author = params.get('author');
 
-  <script>
-    // --- Leer parámetros de la URL ---
-    const params = new URLSearchParams(window.location.search);
-    const phrase = params.get('phrase');
-    const author = params.get('author');
-    const img = params.get('img');
-    const music = params.get('music');
-    const songTitle = params.get('songTitle');
-    const songArtist = params.get('songArtist');
-    const imgPhotographer = params.get('imgPhotographer');
-    const imgPhotographerUrl = params.get('imgPhotographerUrl');
-    const songArtistUrl = params.get('songArtistUrl');
+        function setMeta(property, content, name=false) {
+            let selector = name ? `meta[name="${property}"]` : `meta[property="${property}"]`;
+            let meta = document.querySelector(selector);
+            if (!meta) {
+                meta = document.createElement('meta');
+                if(name) meta.setAttribute('name', property);
+                else meta.setAttribute('property', property);
+                document.head.appendChild(meta);
+            }
+            meta.setAttribute('content', content);
+        }
 
-    // --- Función para actualizar o crear meta tags ---
-    function setMeta(property, content, name=false) {
-      let selector = name ? `meta[name="${property}"]` : `meta[property="${property}"]`;
-      let meta = document.querySelector(selector);
-      if (!meta) {
-        meta = document.createElement('meta');
-        if(name) meta.setAttribute('name', property);
-        else meta.setAttribute('property', property);
-        document.head.appendChild(meta);
-      }
-      meta.setAttribute('content', content);
-    }
+        if (phrase) {
+            setMeta('og:title', phrase);
+            setMeta('og:description', phrase);
+            setMeta('twitter:title', phrase, true);
+            setMeta('twitter:description', phrase, true);
+            document.title = phrase;
+        }
 
-    // --- Actualizar meta tags dinámicamente ---
-    if (phrase) {
-      setMeta('og:title', phrase);
-      setMeta('og:description', phrase);
-      setMeta('twitter:title', phrase, true);
-      setMeta('twitter:description', phrase, true);
-      document.title = phrase;
-    }
+        if (img) {
+            setMeta('og:image', img);
+            setMeta('twitter:image', img, true);
+            setMeta('og:image:alt', 'Momento de calma');
+            setMeta('twitter:image:alt', 'Momento de calma', true);
+        }
 
-    if (img) {
-      setMeta('og:image', img);
-      setMeta('twitter:image', img, true);
-      setMeta('og:image:alt', 'Momento de calma');
-      setMeta('twitter:image:alt', 'Momento de calma', true);
-    }
+        if (author) {
+            setMeta('og:author', author);
+        }
+    </script>
 
-    if (author) {
-      setMeta('og:author', author);
-    }
-
-    if (music && songTitle && songArtist) {
-      setMeta('og:music', music);
-      setMeta('og:music:title', songTitle);
-      setMeta('og:music:artist', songArtist);
-    }
-
-    if (imgPhotographer) {
-      let creditText = imgPhotographerUrl ? `${imgPhotographer} (${imgPhotographerUrl})` : imgPhotographer;
-      setMeta('og:image:credit', creditText);
-    }
-  </script>
+    <!-- El script principal de tu app -->
+    <script src="recursos/js/script.js"></script>
 </head>
 <body>
-  <main id="moment-container" style="text-align:center; margin-top:5%;">
-    <h1 id="phrase-text">Cargando tu Momento...</h1>
-    <p id="author-text" style="font-style:italic; margin-top:0.5rem;"></p>
-    <div id="preview-image" style="margin-top:1rem;"></div>
-    <div id="music-info" style="margin-top:1rem;"></div>
-    <div id="credits" style="margin-top:1rem; font-size:0.9rem; color:#555;"></div>
-  </main>
+    <main id="moment-container">
+        <div id="headphone-overlay" class="overlay">
+            <div class="overlay-content">
+                <p>Para una mejor experiencia, te recomendamos usar auriculares.</p>
+                <button id="play-anyway-button">Reproducir Audio</button>
+                <button id="play-silent-button">Continuar en Silencio</button>
+            </div>
+        </div>
 
-  <script>
-    // --- Mostrar contenido dinámico ---
-    document.getElementById('phrase-text').textContent = phrase || 'Respira y sonríe 🌿';
-    document.getElementById('author-text').textContent = author ? `— ${author}` : '';
+        <div id="moment-content">
+            <h2 id="phrase-text"></h2>
+            <p id="author-text"></p>
+        </div>
 
-    if(img) {
-      const imgEl = document.createElement('img');
-      imgEl.src = img;
-      imgEl.alt = 'Momento de calma';
-      imgEl.style.maxWidth = '80%';
-      imgEl.style.borderRadius = '10px';
-      document.getElementById('preview-image').appendChild(imgEl);
-    }
+        <div id="on-screen-controls">
+            <div id="attribution-panel">
+                <h3>Sobre los Artistas</h3>
+                <div><h4>Fotografía</h4><p id="photo-artist"></p><p class="via-text">vía Pexels</p></div>
+                <div><h4>Música</h4><p id="music-title"></p><p id="music-artist"></p><p class="via-text">vía Jamendo</p></div>
+                <div><h4>Frase</h4><p id="phrase-author"></p></div>
+            </div>
+            <div id="bottom-buttons-row">
+                <div id="attribution-button"><img src="recursos/images/attribution.webp" alt="Sobre los Artistas"></div>
+                <div id="audio-player"><button id="play-pause-button"></button><audio id="moment-audio" src=""></audio></div>
+                <div class="button-spacer"></div>
+            </div>
+        </div>
+    </main>
 
-    if(music && songTitle && songArtist) {
-      document.getElementById('music-info').textContent = `🎵 ${songTitle} — ${songArtist}`;
-    }
+    <div id="cta-bar">
+        <div id="cta-text"><p>Esto es un Momento creado con <strong>SenDo</strong>, una app gratuita para encontrar tu calma diaria.</p></div>
+        <div id="cta-button"><a id="download-link" href="#" target="_blank"><img src="recursos/images/googleplay.webp" alt="Obtener en Google Play"></a></div>
+    </div>
 
-    let creditsArr = [];
-    if(imgPhotographer) creditsArr.push(imgPhotographerUrl ? `📸 ${imgPhotographer} (${imgPhotographerUrl})` : `📸 ${imgPhotographer}`);
-    if(songArtist) creditsArr.push(songArtistUrl ? `🎵 ${songArtist} (${songArtistUrl})` : `🎵 ${songArtist}`);
-    document.getElementById('credits').innerHTML = creditsArr.join('<br>');
-  </script>
+    <footer id="ad-footer">
+        <div id="ad-container"></div>
+        <button id="close-ad-button">×</button>
+    </footer>
 </body>
 </html>
