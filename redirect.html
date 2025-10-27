@@ -1,31 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Cargando Momento de SenDo...</title>
-    <!-- Este script se ejecuta instantáneamente para rellenar los meta tags -->
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const img = params.get('img');
-        const phrase = params.get('phrase');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Momento de calma 🌿 | SenDo</title>
 
+  <!-- Metadatos base visibles para bots -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Un Momento de calma 🌿">
+  <meta property="og:description" content="Disfruta un instante de serenidad compartido desde la app SenDo.">
+  <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Un Momento de calma 🌿">
+  <meta name="twitter:description" content="Disfruta un instante de serenidad compartido desde la app SenDo.">
+  <meta name="twitter:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/logo.png">
+
+  <style>
+    body { font-family: system-ui, sans-serif; text-align: center; margin-top: 10%; }
+    img { max-width: 80%; border-radius: 10px; margin-top: 1rem; }
+  </style>
+
+  <script>
+    (function() {
+      const p = new URLSearchParams(location.search);
+      const img = p.get('img');
+      const phrase = p.get('phrase');
+
+      // Mostrar información en la página (para humanos)
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('phrase').textContent = phrase || 'Respira y sonríe 🌿';
         if (img) {
-            document.write(`<meta property="og:image" content="${img}">`);
+          const image = document.createElement('img');
+          image.src = img;
+          image.alt = 'Momento de calma';
+          document.getElementById('preview').appendChild(image);
         }
-        if (phrase) {
-            document.write(`<meta property="og:title" content="${phrase}">`);
-        }
-        
-        // Añadimos tags estáticos importantes que se pierden con document.write
-        document.write('<meta property="og:type" content="website">');
-        document.write('<meta name="twitter:card" content="summary_large_image">');
-    </script>
+      });
+
+      // Redirigir a index.html para la experiencia completa
+      setTimeout(() => {
+        window.location.href = 'index.html' + location.search;
+      }, 2500);
+    })();
+  </script>
 </head>
+
 <body>
-    <p style="font-family: sans-serif; text-align: center; margin-top: 20%;">Cargando tu Momento de calma...</p>
-    
-    <!-- Este script redirige al usuario humano a la página principal -->
-    <script>
-        window.location.href = 'index.html' + window.location.search;
-    </script>
+  <h1 id="phrase">Cargando tu Momento...</h1>
+  <div id="preview"></div>
+  <p>Preparando tu experiencia de calma...</p>
 </body>
 </html>
