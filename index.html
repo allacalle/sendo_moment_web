@@ -4,65 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Meta tags estáticos de fallback -->
-    <title>Un Momento de SenDo</title>
-    <meta property="og:title" content="Un Momento de SenDo" />
-    <meta property="og:description" content="Una experiencia de calma compartida contigo." />
-    <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/tree.png" />
+    <!-- Meta Tags para Bots (Estáticos y Optimizados) -->
+    <title>Un Momento de SenDo para Ti</title>
+    <meta property="og:title" content="Un Momento de SenDo para Ti" />
+    <meta property="og:description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
     <meta property="og:type" content="website" />
+    
+    <!-- ¡LA LÍNEA CLAVE! Asegúrate de que la ruta es correcta y la imagen está optimizada -->
+    <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/TheSanctuaryTree_1200x628.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="628" />
+
+    <!-- Meta Tags para Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Un Momento de SenDo" />
-    <meta name="twitter:description" content="Una experiencia de calma compartida contigo." />
-    <meta name="twitter:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/tree.png" />
+    <meta name="twitter:title" content="Un Momento de SenDo para Ti" />
+    <meta name="twitter:description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+    <meta name="twitter:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/TheSanctuaryTree_1200x628.jpg" />
 
     <!-- Enlaces a CSS y Fonts -->
     <link rel="stylesheet" href="recursos/css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https:c.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Script para actualizar meta tags dinámicamente para bots -->
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const phrase = params.get('phrase');
-        const img = params.get('img');//fonts.gstati
-        const author = params.get('author');
-
-        function setMeta(property, content, name=false) {
-            let selector = name ? `meta[name="${property}"]` : `meta[property="${property}"]`;
-            let meta = document.querySelector(selector);
-            if (!meta) {
-                meta = document.createElement('meta');
-                if(name) meta.setAttribute('name', property);
-                else meta.setAttribute('property', property);
-                document.head.appendChild(meta);
-            }
-            meta.setAttribute('content', content);
-        }
-
-        if (phrase) {
-            setMeta('og:title', phrase);
-            setMeta('og:description', phrase);
-            setMeta('twitter:title', phrase, true);
-            setMeta('twitter:description', phrase, true);
-            document.title = phrase;
-        }
-
-        if (img) {
-            setMeta('og:image', img);
-            setMeta('twitter:image', img, true);
-            setMeta('og:image:alt', 'Momento de calma');
-            setMeta('twitter:image:alt', 'Momento de calma', true);
-        }
-
-        if (author) {
-            setMeta('og:author', author);
-        }
-    </script>
-
-    <!-- Script principal -->
-    <script src="recursos/js/script.js"></script>
+    <!-- ELIMINADO: El script que actualizaba los meta tags dinámicamente. -->
+    
+    <!-- Script principal (este SÍ se queda, porque es para el usuario) -->
+    <script src="recursos/js/script.js" defer></script>
 </head>
+
+
 <body>
     <main id="moment-container">
         <div id="headphone-overlay" class="overlay">
