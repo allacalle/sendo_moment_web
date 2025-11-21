@@ -14,7 +14,7 @@ function getDecodedParam(paramName, defaultValue = '') {
 }
 
 // --- NUEVA LÓGICA: Leer y decodificar el parámetro 'data' ---
-let decodedMomentData = {};
+let decodedMomentData = {}; // <-- Declaración única
 
 // Intentar leer el parámetro 'data'
 const encodedData = getDecodedParam('data');
@@ -24,7 +24,7 @@ if (encodedData) {
         // 1. Decodificar de Base64
         const decodedString = atob(encodedData);
         // 2. Parsear el JSON
-        decodedMomentData = JSON.parse(decodedString);
+        decodedMomentData = JSON.parse(decodedString); // <-- Asignación
 
         // Extraer valores del JSON decodificado
         // Si no existen, usar valores por defecto
