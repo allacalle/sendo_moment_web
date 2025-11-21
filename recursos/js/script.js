@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const momentContainer = document.getElementById('moment-container');
+document.addEventListener('DOMContentLoaded', () => {
   const phraseText = document.getElementById('phrase-text');
   const authorText = document.getElementById('author-text');
   const playPauseButton = document.getElementById('play-pause-button');
@@ -13,41 +12,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   const musicTitleText = document.getElementById('music-title');
   const musicArtistText = document.getElementById('music-artist');
   const phraseAuthorText = document.getElementById('phrase-author');
+  const momentContainer = document.getElementById('moment-container');
 
-  // --- Función para leer parámetro 'data' ---
-  function getDataFromUrl() {
+  // --- Función para leer parámetro data ---
+  function getDecodedData() {
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('data');
     if (!encodedData) return null;
-
     try {
-      const jsonStr = atob(decodeURIComponent(encodedData));
-      return JSON.parse(jsonStr);
+      const decodedStr = atob(encodedData);
+      return JSON.parse(decodedStr);
     } catch (e) {
       console.error('Error decodificando data:', e);
       return null;
     }
   }
 
-  // --- Cargar momento desde URL o fallback ---
-  const decodedMomentData = getDataFromUrl() || {
-    img: 'recursos/images/sendo_banner.jpg',
-    phrase: 'Respira y suelta todo el estrés.',
+  // --- Cargar momento ---
+  const momentData = getDecodedData() || {
+    // fallback por defecto
+    phrase: 'Un Momento de SenDo para Ti',
     author: 'SenDo',
-    music: 'recursos/audio/demo.mp3',
-    songTitle: 'Calma Interior',
+    img: 'https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg',
+    music: '',
+    songTitle: 'Pista Curada',
     songArtist: 'SenDo Community',
     imgPhotographer: 'SenDo Community'
   };
 
-  // --- Valores ---
-  if (decodedMomentData.img) momentContainer.style.backgroundImage = `url(${decodedMomentData.img})`;
-  phraseText.textContent = `"${decodedMomentData.phrase}"`;
-  authorText.textContent = `- ${decodedMomentData.author}`;
-  photoArtistText.textContent = `de ${decodedMomentData.imgPhotographer}`;
-  musicTitleText.textContent = `"${decodedMomentData.songTitle}"`;
-  musicArtistText.textContent = `de ${decodedMomentData.songArtist}`;
-  phraseAuthorText.textContent = `de ${decodedMomentData.author}`;
+  // --- Rellenar la web ---
+  if (momentData.img) momentContainer.style.backgroundImage = `url(${momentData.img})`;
+  phraseText.textContent = `"${momentData.phrase}"`;
+  authorText.textContent = `- ${momentData.author}`;
+  photoArtistText.textContent = `de ${momentData.imgPhotographer}`;
+  musicTitleText.textContent = `"${momentData.songTitle || 'Pista Curada'}"`;
+  musicArtistText.textContent = `de ${momentData.songArtist || 'SenDo Community'}`;
+  phraseAuthorText.textContent = `de ${momentData.author}`;
 
   // --- Audio ---
   let isPlaying = false;
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   playPauseButton.addEventListener('click', () => {
     if (!isPlaying) {
-      if (decodedMomentData.music) headphoneOverlay.style.display = 'flex';
+      if (momentData.music) headphoneOverlay.style.display = 'flex';
     } else {
       momentAudio.pause();
     }
@@ -64,20 +64,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   playAnywayButton.addEventListener('click', (e) => {
     e.stopPropagation();
     headphoneOverlay.style.display = 'none';
-    if (!audioSourceSet) { momentAudio.src = decodedMomentData.music; audioSourceSet = true; }
+    if (!audioSourceSet && momentData.music) {
+      momentAudio.src = momentData.music;
+      audioSourceSet = true;
+    }
     momentAudio.play().catch(console.error);
   });
 
-  playSilentButton.addEventListener('click', (e) => { e.stopPropagation(); headphoneOverlay.style.display = 'none'; });
+  playSilentButton.addEventListener('click', (e) => { 
+    e.stopPropagation();
+    headphoneOverlay.style.display = 'none';
+  });
 
   momentAudio.onplaying = () => { isPlaying = true; playPauseButton.classList.add('playing'); };
   momentAudio.onpause = () => { isPlaying = false; playPauseButton.classList.remove('playing'); };
   momentAudio.onended = () => { isPlaying = false; playPauseButton.classList.remove('playing'); };
 
   // --- Atribuciones ---
-  attributionButton.addEventListener('click', (e) => { e.stopPropagation(); attributionPanel.classList.toggle('visible'); });
+  attributionButton.addEventListener('click', (e) => { 
+    e.stopPropagation(); 
+    attributionPanel.classList.toggle('visible'); 
+  });
   document.body.addEventListener('click', (e) => {
-    if (attributionPanel.classList.contains('visible') && !attributionPanel.contains(e.target) && !attributionButton.contains(e.target)) {
+    if (attributionPanel.classList.contains('visible') &&
+        !attributionPanel.contains(e.target) &&
+        !attributionButton.contains(e.target)) {
       attributionPanel.classList.remove('visible');
     }
   });
