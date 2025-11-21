@@ -13,10 +13,38 @@ function getDecodedParam(paramName, defaultValue = '') {
     return decodeURIComponent(value);
 }
 
-// Leemos los datos necesarios para los meta tags inmediatamente.
-const metaImageUrl = getDecodedParam('img');
-const metaPhrase = getDecodedParam('phrase', 'Un Momento de SenDo');
-const metaAuthor = getDecodedParam('author', 'SenDo');
+// --- NUEVA LÓGICA: Leer y decodificar el parámetro 'data' ---
+let decodedMomentData = {};
+
+// Intentar leer el parámetro 'data'
+const encodedData = getDecodedParam('data');
+
+if (encodedData) {
+    try {
+        // 1. Decodificar de Base64
+        const decodedString = atob(encodedData);
+        // 2. Parsear el JSON
+        decodedMomentData = JSON.parse(decodedString);
+
+        // Extraer valores del JSON decodificado
+        // Si no existen, usar valores por defecto
+        var metaImageUrl = decodedMomentData.img || '';
+        var metaPhrase = decodedMomentData.phrase || 'Un Momento de SenDo';
+        var metaAuthor = decodedMomentData.author || 'SenDo';
+        // Puedes hacer lo mismo para otros campos si los necesitas en el <head>
+    } catch (e) {
+        console.error("Error al decodificar o parsear el parámetro 'data':", e);
+        // Si falla la decodificación, usar valores por defecto
+        var metaImageUrl = getDecodedParam('img', ''); // Fallback al parámetro antiguo si existe
+        var metaPhrase = getDecodedParam('phrase', 'Un Momento de SenDo');
+        var metaAuthor = getDecodedParam('author', 'SenDo');
+    }
+} else {
+    // Si no hay parámetro 'data', usar el método antiguo
+    var metaImageUrl = getDecodedParam('img', '');
+    var metaPhrase = getDecodedParam('phrase', 'Un Momento de SenDo');
+    var metaAuthor = getDecodedParam('author', 'SenDo');
+}
 
 // Actualizamos los tags en el <head> AHORA MISMO.
 if (metaPhrase && metaImageUrl) {
@@ -55,13 +83,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicArtistText = document.getElementById('music-artist');
     const phraseAuthorText = document.getElementById('phrase-author');
     
-    // Leemos el resto de los datos (ya decodificados por la función de arriba)
-    const musicUrl = getDecodedParam('music');
-    const songTitle = getDecodedParam('songTitle', 'Pista Curada');
-    const songArtist = getDecodedParam('songArtist', 'SenDo Community');
-    const imgPhotographer = getDecodedParam('imgPhotographer', 'SenDo Community');
-    const songArtistUrl = getDecodedParam('songArtistUrl');
-    const imgPhotographerUrl = getDecodedParam('imgPhotographerUrl');
+    // Leemos el resto de los datos desde el objeto 'decodedMomentData' obtenido antes
+    const musicUrl = decodedMomentData.music || getDecodedParam('music'); // Fallback al antiguo si no está en data
+    const songTitle = decodedMomentData.songTitle || getDecodedParam('songTitle', 'Pista Curada');
+    const songArtist = decodedMomentData.songArtist || getDecodedParam('songArtist', 'SenDo Community');
+    const imgPhotographer = decodedMomentData.imgPhotographer || getDecodedParam('imgPhotographer', 'SenDo Community');
+    const songArtistUrl = decodedMomentData.songArtistUrl || getDecodedParam('songArtistUrl');
+    const imgPhotographerUrl = decodedMomentData.imgPhotographerUrl || getDecodedParam('imgPhotographerUrl');
+    // Usamos los valores ya decodificados para phrase y author
+    const metaImageUrl = decodedMomentData.img || getDecodedParam('img'); // Aseguramos que se use el correcto
+    const metaPhrase = decodedMomentData.phrase; // Ya lo tenemos del JSON
+    const metaAuthor = decodedMomentData.author; // Ya lo tenemos del JSON
 
     // 2. PUESTA EN ESCENA (Rellenar el <body>)
     if (metaImageUrl) momentContainer.style.backgroundImage = `url(${metaImageUrl})`;

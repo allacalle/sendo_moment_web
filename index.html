@@ -4,25 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Meta Tags para Bots (Estáticos y Optimizados) -->
-    <title>Un Momento de SenDo para Ti</title>
-    <meta property="og:title" content="Un Momento de SenDo para Ti" />
-    <meta property="og:description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+    <!-- Meta Tags para Bots (Dinámicos o Fallback) -->
+    <!-- El título y descripción se actualizarán dinámicamente si se reciben parámetros -->
+    <title id="dynamic-title">Un Momento de SenDo para Ti</title>
+    <meta property="og:title" id="og-title" content="Un Momento de SenDo para Ti" />
+    <meta property="og:description" id="og-description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
     <meta property="og:type" content="website" />
     
-    <!-- ¡LÍNEA CLAVE ACTUALIZADA! -->
-    <!-- Apunta a tu nuevo 'sendo_banner.jpg' -->
-    <meta property="og:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
+    <!-- La imagen de OG puede permanecer estática o actualizarse dinámicamente también -->
+    <meta property="og:image" id="og-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="628" />
     <meta property="og:site_name" content="SenDo" />
 
-    <!-- Meta Tags para Twitter -->
+    <!-- Meta Tags para Twitter (Dinámicos o Fallback) -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Un Momento de SenDo para Ti" />
-    <meta name="twitter:description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
-    <!-- ¡LÍNEA CLAVE ACTUALIZADA! -->
-    <meta name="twitter:image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
+    <meta name="twitter:title" id="twitter-title" content="Un Momento de SenDo para Ti" />
+    <meta name="twitter:description" id="twitter-description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+    <meta name="twitter:image" id="twitter-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
 
     <!-- Enlaces a CSS y Fonts -->
     <link rel="stylesheet" href="recursos/css/styles.css">
@@ -31,6 +30,81 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Script principal para la interactividad de la página -->
+    <!-- Movemos la lógica de lectura de parámetros aquí para que se ejecute antes del DOMContentLoaded -->
+    <script>
+        // --- PARTE 1: ACCIÓN INMEDIATA (Para actualizar metatags antes de que el DOM esté completamente cargado) ---
+        // Función auxiliar para leer y decodificar parámetros de la URL de forma segura.
+        function getDecodedParam(paramName, defaultValue = '') {
+            const params = new URLSearchParams(window.location.search);
+            const value = params.get(paramName);
+            if (value === null || value === 'null' || value === undefined) {
+                return defaultValue;
+            }
+            try {
+                return decodeURIComponent(value);
+            } catch (e) {
+                console.error(`Error al decodificar el parámetro '${paramName}':`, e);
+                return defaultValue;
+            }
+        }
+
+        // --- LÓGICA DE ACTUALIZACIÓN DE METATAGS ---
+        // 1. Intentar leer el parámetro 'data'
+        const encodedData = getDecodedParam('data');
+        let decodedMomentData = null;
+
+        if (encodedData) {
+            try {
+                // 1.1 Decodificar de Base64
+                const decodedString = atob(encodedData);
+                // 1.2 Parsear el JSON
+                decodedMomentData = JSON.parse(decodedString);
+                console.log("Datos decodificados desde 'data':", decodedMomentData);
+
+                // 1.3 Extraer valores del JSON decodificado para metatags
+                const metaPhrase = decodedMomentData.phrase || 'Un Momento de SenDo';
+                const metaAuthor = decodedMomentData.author || 'SenDo';
+                const metaImageUrl = decodedMomentData.img || 'https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg';
+                const metaDescription = `Un Momento de calma de ${metaAuthor}.`;
+
+                // 1.4 Actualizar metatags con los datos decodificados
+                document.getElementById('dynamic-title').textContent = `"${metaPhrase}"`;
+                document.getElementById('og-title').setAttribute('content', `"${metaPhrase}"`);
+                document.getElementById('og-description').setAttribute('content', metaDescription);
+                document.getElementById('og-image').setAttribute('content', metaImageUrl);
+                document.getElementById('twitter-title').setAttribute('content', `"${metaPhrase}"`);
+                document.getElementById('twitter-description').setAttribute('content', metaDescription);
+                document.getElementById('twitter-image').setAttribute('content', metaImageUrl);
+
+            } catch (e) {
+                console.error("Error al decodificar o parsear el parámetro 'data':", e);
+                // Si falla, no actualizamos los metatags, se quedarán con los valores por defecto o los antiguos.
+                // Opcional: Podríamos intentar el modo antiguo aquí si se desea.
+            }
+        } else {
+            // 2. Si no hay parámetro 'data', usar el método antiguo para metatags (fallback)
+            // Solo actualizamos si los metatags no han sido ya actualizados por el bloque 'if'
+            // (en caso de que haya un error parcial en la decodificación).
+            // Usamos los parámetros individuales si 'data' no está presente.
+            const fallbackPhrase = getDecodedParam('phrase', 'Un Momento de SenDo');
+            const fallbackAuthor = getDecodedParam('author', 'SenDo');
+            const fallbackImgUrl = getDecodedParam('img', 'https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg');
+            const fallbackDescription = `Un Momento de calma de ${fallbackAuthor}.`;
+
+            // Verificamos si ya fueron actualizados por el bloque 'if' de 'data'
+            if (document.getElementById('dynamic-title').textContent === 'Un Momento de SenDo para Ti') {
+                 document.getElementById('dynamic-title').textContent = `"${fallbackPhrase}"`;
+                 document.getElementById('og-title').setAttribute('content', `"${fallbackPhrase}"`);
+                 document.getElementById('og-description').setAttribute('content', fallbackDescription);
+                 document.getElementById('og-image').setAttribute('content', fallbackImgUrl);
+                 document.getElementById('twitter-title').setAttribute('content', `"${fallbackPhrase}"`);
+                 document.getElementById('twitter-description').setAttribute('content', fallbackDescription);
+                 document.getElementById('twitter-image').setAttribute('content', fallbackImgUrl);
+            }
+        }
+
+    </script>
+
     <script src="recursos/js/script.js" defer></script>
 </head>
 
@@ -70,6 +144,6 @@
     </div>
 
     <!-- ¡SECCIÓN DE ANUNCIOS ELIMINADA! -->
-    
+
 </body>
 </html>
