@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  const decodedMomentData = getDecodedDataParam();
+  const decodedMomentData = JSON.parse(decodeURIComponent(atob(dataParam)));
+
 
   // --- Valores por defecto ---
   const defaultMoment = {
