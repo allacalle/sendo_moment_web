@@ -1,58 +1,10 @@
-// --- PARTE 1: ACCIÓN INMEDIATA (Metatags y parámetros) ---
-function getDecodedParam(paramName, defaultValue = '') {
-  const params = new URLSearchParams(window.location.search);
-  const value = params.get(paramName);
-  if (value === null || value === 'null' || value === undefined) {
-    return defaultValue;
-  }
-  try {
-    return decodeURIComponent(value);
-  } catch (e) {
-    console.error(`Error al decodificar parámetro '${paramName}':`, e);
-    return defaultValue;
-  }
-}
-
-let decodedMomentData = {};
-const encodedData = getDecodedParam('data');
-
-if (encodedData) {
-  try {
-    const decodedString = atob(encodedData);
-    decodedMomentData = JSON.parse(decodedString);
-
-    const metaPhrase = decodedMomentData.phrase || 'Un Momento de SenDo';
-    const metaAuthor = decodedMomentData.author || 'SenDo';
-    const metaImageUrl = decodedMomentData.img || 'https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg';
-    const metaDescription = `Un Momento de calma de ${metaAuthor}.`;
-
-    document.title = `"${metaPhrase}"`;
-    try {
-      document.querySelector("meta[property='og:title']").setAttribute('content', `"${metaPhrase}"`);
-      document.querySelector("meta[property='og:image']").setAttribute('content', metaImageUrl);
-      document.querySelector("meta[property='og:description']").setAttribute('content', metaDescription);
-      document.querySelector("meta[name='twitter:title']").setAttribute('content', `"${metaPhrase}"`);
-      document.querySelector("meta[name='twitter:description']").setAttribute('content', metaDescription);
-      document.querySelector("meta[name='twitter:image']").setAttribute('content', metaImageUrl);
-    } catch (e) {
-      console.error("Error al actualizar meta tags:", e);
-    }
-
-  } catch (e) {
-    console.error("Error decodificando/parsing 'data':", e);
-  }
-}
-
-// --- PARTE 2: ACCIÓN DIFERIDA (DOM listo) ---
-document.addEventListener('DOMContentLoaded', () => {
-
-  // --- Referencias DOM ---
+document.addEventListener('DOMContentLoaded', async () => {
+  // --- ELEMENTOS ---
   const momentContainer = document.getElementById('moment-container');
   const phraseText = document.getElementById('phrase-text');
   const authorText = document.getElementById('author-text');
   const playPauseButton = document.getElementById('play-pause-button');
   const momentAudio = document.getElementById('moment-audio');
-  const downloadLink = document.getElementById('download-link');
   const headphoneOverlay = document.getElementById('headphone-overlay');
   const playAnywayButton = document.getElementById('play-anyway-button');
   const playSilentButton = document.getElementById('play-silent-button');
@@ -63,77 +15,101 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicArtistText = document.getElementById('music-artist');
   const phraseAuthorText = document.getElementById('phrase-author');
 
-  // --- Datos del momento ---
-  const musicUrl = decodedMomentData.music || getDecodedParam('music');
-  const songTitle = decodedMomentData.songTitle || getDecodedParam('songTitle', 'Pista Curada');
-  const songArtist = decodedMomentData.songArtist || getDecodedParam('songArtist', 'SenDo Community');
-  const imgPhotographer = decodedMomentData.imgPhotographer || getDecodedParam('imgPhotographer', 'SenDo Community');
-  const songArtistUrl = decodedMomentData.songArtistUrl || getDecodedParam('songArtistUrl');
-  const imgPhotographerUrl = decodedMomentData.imgPhotographerUrl || getDecodedParam('imgPhotographerUrl');
-  const metaImageUrl = decodedMomentData.img || getDecodedParam('img');
-  const metaPhrase = decodedMomentData.phrase || 'Un Momento de SenDo';
-  const metaAuthor = decodedMomentData.author || 'SenDo';
+  // --- CARGAR MOMENTO ---
+  async function loadMoment() {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('data');
+    if (!encoded) return null;
 
-  // --- Render del momento ---
+    try {
+      const decoded = atob(encoded);
+      return JSON.parse(decoded);
+    } catch (e) {
+      console.error('Error decoding Base64 data:', e);
+      return null;
+    }
+  }
+
+  const decodedMomentData = await loadMoment();
+  if (!decodedMomentData) {
+    phraseText.textContent = 'No se pudo cargar el momento';
+    return;
+  }
+
+  // --- RELLENAR DATOS ---
+  const metaImageUrl = decodedMomentData.img || '';
+  const metaPhrase = decodedMomentData.phrase || '';
+  const metaAuthor = decodedMomentData.author || '';
+  const musicUrl = decodedMomentData.music || '';
+  const songTitle = decodedMomentData.songTitle || 'Pista Curada';
+  const songArtist = decodedMomentData.songArtist || 'SenDo Community';
+  const imgPhotographer = decodedMomentData.imgPhotographer || 'SenDo Community';
+  const songArtistUrl = decodedMomentData.songArtistUrl || null;
+  const imgPhotographerUrl = decodedMomentData.imgPhotographerUrl || null;
+
   if (metaImageUrl) momentContainer.style.backgroundImage = `url(${metaImageUrl})`;
   phraseText.textContent = `"${metaPhrase}"`;
   authorText.textContent = `- ${metaAuthor}`;
-  downloadLink.href = 'https://play.google.com/store/apps/details?id=com.tu.paquete.sendo';
-
   photoArtistText.textContent = `de ${imgPhotographer}`;
   musicTitleText.textContent = `"${songTitle}"`;
   musicArtistText.textContent = `de ${songArtist}`;
   phraseAuthorText.textContent = `de ${metaAuthor}`;
 
-  if (imgPhotographerUrl) photoArtistText.innerHTML = `de <a href="${imgPhotographerUrl}" target="_blank" rel="noopener noreferrer">${imgPhotographer}</a>`;
-  if (songArtistUrl) musicArtistText.innerHTML = `de <a href="${songArtistUrl}" target="_blank" rel="noopener noreferrer">${songArtist}</a>`;
+  if (imgPhotographerUrl) {
+    photoArtistText.innerHTML = `de <a href="${imgPhotographerUrl}" target="_blank">${imgPhotographer}</a>`;
+  }
+  if (songArtistUrl) {
+    musicArtistText.innerHTML = `de <a href="${songArtistUrl}" target="_blank">${songArtist}</a>`;
+  }
 
-  // --- Audio ---
+  // --- AUDIO ---
   let isPlaying = false;
   let audioSourceSet = false;
 
-  playPauseButton.addEventListener('click', () => {
+  function togglePlayPause() {
     if (!isPlaying) {
-      if (!audioSourceSet && musicUrl) headphoneOverlay.style.display = 'flex';
-      else if (musicUrl) momentAudio.play().catch(console.error);
+      if (!audioSourceSet && musicUrl) {
+        headphoneOverlay.style.display = 'flex';
+      } else if (audioSourceSet) {
+        momentAudio.play().catch(console.error);
+      }
     } else {
       momentAudio.pause();
     }
-  });
+  }
 
-  playAnywayButton.addEventListener('click', () => {
+  playPauseButton.addEventListener('click', togglePlayPause);
+
+  playAnywayButton.addEventListener('click', (e) => {
+    e.stopPropagation();
     headphoneOverlay.style.display = 'none';
-    if (!audioSourceSet) {
+    if (!audioSourceSet && musicUrl) {
       momentAudio.src = musicUrl;
       audioSourceSet = true;
     }
     momentAudio.play().catch(console.error);
   });
 
-  playSilentButton.addEventListener('click', () => headphoneOverlay.style.display = 'none');
+  playSilentButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    headphoneOverlay.style.display = 'none';
+  });
 
-  momentAudio.onplaying = () => {
-    isPlaying = true;
-    playPauseButton.classList.add('playing');
-  };
-  momentAudio.onpause = momentAudio.onended = () => {
-    isPlaying = false;
-    playPauseButton.classList.remove('playing');
-  };
+  momentAudio.onplaying = () => { isPlaying = true; playPauseButton.classList.add('playing'); };
+  momentAudio.onpause = () => { isPlaying = false; playPauseButton.classList.remove('playing'); };
+  momentAudio.onended = () => { isPlaying = false; playPauseButton.classList.remove('playing'); };
 
-  // --- Panel de atribución ---
-  attributionButton.addEventListener('click', (event) => {
-    event.stopPropagation();
+  // --- PANEL DE ATRIBUCIONES ---
+  attributionButton.addEventListener('click', (e) => {
+    e.stopPropagation();
     attributionPanel.classList.toggle('visible');
   });
 
-  document.body.addEventListener('click', (event) => {
+  document.body.addEventListener('click', (e) => {
     if (attributionPanel.classList.contains('visible') &&
-        !attributionPanel.contains(event.target) &&
-        !attributionButton.contains(event.target)) {
+        !attributionPanel.contains(e.target) &&
+        !attributionButton.contains(e.target)) {
       attributionPanel.classList.remove('visible');
     }
   });
-
-  console.log("Página-Momento inicializada con éxito.");
 });
