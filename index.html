@@ -1,126 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Meta Tags para Bots (dinámicos o fallback) -->
-    <title id="dynamic-title">Un Momento de SenDo para Ti</title>
-    <meta property="og:title" id="og-title" content="Un Momento de SenDo para Ti" />
-    <meta property="og:description" id="og-description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" id="og-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="628" />
-    <meta property="og:site_name" content="SenDo" />
+<!-- Meta Tags para Bots -->
+<title id="dynamic-title">Un Momento de SenDo para Ti</title>
+<meta property="og:title" id="og-title" content="Un Momento de SenDo para Ti" />
+<meta property="og:description" id="og-description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+<meta property="og:type" content="website" />
+<meta property="og:image" id="og-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="628" />
+<meta property="og:site_name" content="SenDo" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" id="twitter-title" content="Un Momento de SenDo para Ti" />
-    <meta name="twitter:description" id="twitter-description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
-    <meta name="twitter:image" id="twitter-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" id="twitter-title" content="Un Momento de SenDo para Ti" />
+<meta name="twitter:description" id="twitter-description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+<meta name="twitter:image" id="twitter-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
 
-    <!-- CSS y fuentes -->
-    <link rel="stylesheet" href="recursos/css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="recursos/css/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Script para actualizar metatags dinámicos -->
-    <script>
-        function getDecodedParam(paramName, defaultValue = '') {
-            const params = new URLSearchParams(window.location.search);
-            const value = params.get(paramName);
-            if (!value || value === 'null') return defaultValue;
-            try { return decodeURIComponent(value); } 
-            catch { return defaultValue; }
-        }
-
-        let decodedMomentData = {};
-        const encodedData = getDecodedParam('data', '');
-        if (encodedData) {
-            try {
-                decodedMomentData = JSON.parse(atob(encodedData));
-            } catch (e) {
-                console.error("Error decodificando 'data':", e);
-            }
-        }
-
-        const metaPhrase = decodedMomentData.phrase || getDecodedParam('phrase', 'Un Momento de SenDo');
-        const metaAuthor = decodedMomentData.author || getDecodedParam('author', 'SenDo');
-        const metaImageUrl = decodedMomentData.img || getDecodedParam('img', 'https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg');
-        const metaDescription = `Un Momento de calma de ${metaAuthor}.`;
-
-        document.title = `"${metaPhrase}"`;
-        try {
-            document.getElementById('dynamic-title').textContent = `"${metaPhrase}"`;
-            document.getElementById('og-title').setAttribute('content', `"${metaPhrase}"`);
-            document.getElementById('og-description').setAttribute('content', metaDescription);
-            document.getElementById('og-image').setAttribute('content', metaImageUrl);
-            document.getElementById('twitter-title').setAttribute('content', `"${metaPhrase}"`);
-            document.getElementById('twitter-description').setAttribute('content', metaDescription);
-            document.getElementById('twitter-image').setAttribute('content', metaImageUrl);
-        } catch(e){ console.error("Error actualizando metatags:", e);}
-    </script>
-
-    <!-- Script principal -->
-    <script src="recursos/js/script.js" defer></script>
+<!-- Script principal -->
+<script src="recursos/js/index.js" defer></script>
 </head>
 
 <body>
-    <main id="moment-container">
-        <div id="headphone-overlay" class="overlay">
-            <div class="overlay-content">
-                <p>Para una mejor experiencia, te recomendamos usar auriculares.</p>
-                <button id="play-anyway-button">Reproducir Audio</button>
-                <button id="play-silent-button">Continuar en Silencio</button>
-            </div>
-        </div>
+<main id="moment-container">
 
-        <div id="moment-content">
-            <h2 id="phrase-text"></h2>
-            <p id="author-text"></p>
-        </div>
-
-        <div id="on-screen-controls">
-            <div id="attribution-panel">
-                <h3>Sobre los Artistas</h3>
-                <div>
-                    <h4>Fotografía</h4>
-                    <p id="photo-artist"></p>
-                    <p class="via-text">vía Pexels</p>
-                </div>
-                <div>
-                    <h4>Música</h4>
-                    <p id="music-title"></p>
-                    <p id="music-artist"></p>
-                    <p class="via-text">vía Jamendo</p>
-                </div>
-                <div>
-                    <h4>Frase</h4>
-                    <p id="phrase-author"></p>
-                </div>
-            </div>
-
-            <div id="bottom-buttons-row">
-                <div id="attribution-button"><img src="recursos/images/attribution.webp" alt="Sobre los Artistas"></div>
-                <div id="audio-player">
-                    <button id="play-pause-button"></button>
-                    <audio id="moment-audio" src=""></audio>
-                </div>
-                <div class="button-spacer"></div>
-            </div>
-        </div>
-    </main>
-
-    <div id="cta-bar">
-        <div id="cta-text">
-            <p>Esto es un Momento creado con <strong>SenDo</strong>, una app para encontrar tu calma diaria.</p>
-        </div>
-        <div id="cta-button">
-            <a id="download-link" href="#" target="_blank">
-                <img src="recursos/images/googleplay.webp" alt="Obtener en Google Play">
-            </a>
-        </div>
+  <div id="headphone-overlay" class="overlay">
+    <div class="overlay-content">
+      <p>Para una mejor experiencia, te recomendamos usar auriculares.</p>
+      <button id="play-anyway-button">Reproducir Audio</button>
+      <button id="play-silent-button">Continuar en Silencio</button>
     </div>
+  </div>
+
+  <div id="moment-content">
+    <h2 id="phrase-text"></h2>
+    <p id="author-text"></p>
+  </div>
+
+  <div id="on-screen-controls">
+    <div id="attribution-panel">
+      <h3>Sobre los Artistas</h3>
+      <div><h4>Fotografía</h4><p id="photo-artist"></p></div>
+      <div><h4>Música</h4><p id="music-title"></p><p id="music-artist"></p></div>
+      <div><h4>Frase</h4><p id="phrase-author"></p></div>
+    </div>
+
+    <div id="bottom-buttons-row">
+      <div id="attribution-button"><img src="recursos/images/attribution.webp" alt="Sobre los Artistas"></div>
+      <div id="audio-player">
+        <button id="play-pause-button"></button>
+        <audio id="moment-audio" src=""></audio>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="cta-bar">
+  <div id="cta-text"><p>Esto es un Momento creado con <strong>SenDo</strong>, una app para encontrar tu calma diaria.</p></div>
+  <div id="cta-button">
+    <a id="download-link" href="#" target="_blank">
+      <img src="recursos/images/googleplay.webp" alt="Obtener en Google Play">
+    </a>
+  </div>
+</div>
+
 </body>
 </html>
