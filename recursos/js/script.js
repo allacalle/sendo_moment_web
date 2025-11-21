@@ -14,22 +14,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   const musicArtistText = document.getElementById('music-artist');
   const phraseAuthorText = document.getElementById('phrase-author');
 
-  // --- Función para leer y decodificar parámetro 'data' ---
-  function getDecodedDataParam() {
-    const params = new URLSearchParams(window.location.search);
-    const encoded = params.get('data');
-    if (!encoded) return null;
-    try {
-      const decodedString = atob(decodeURIComponent(encoded));
-      return JSON.parse(decodedString);
-    } catch (e) {
-      console.error("Error decodificando parámetro 'data':", e);
-      return null;
-    }
+  // --- Función para decodificar Base64 con UTF-8 ---
+  function base64DecodeUnicode(str) {
+    const bytes = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
   }
 
-  const decodedMomentData = JSON.parse(decodeURIComponent(atob(dataParam)));
+  // --- Leer parámetro 'data' ---
+  const params = new URLSearchParams(window.location.search);
+  const dataParam = params.get('data');
 
+  let decodedMomentData = null;
+  if (dataParam) {
+    try {
+      decodedMomentData = JSON.parse(base64DecodeUnicode(decodeURIComponent(dataParam)));
+    } catch (e) {
+      console.error("Error decodificando parámetro 'data':", e);
+    }
+  }
 
   // --- Valores por defecto ---
   const defaultMoment = {
