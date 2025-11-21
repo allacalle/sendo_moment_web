@@ -14,8 +14,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const musicArtistText = document.getElementById('music-artist');
   const phraseAuthorText = document.getElementById('phrase-author');
 
-  // --- Momentos de prueba (puedes reemplazar con Base64 o Supabase luego) ---
-  const decodedMomentData = {
+  // --- Función para leer parámetro 'data' ---
+  function getDataFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const encodedData = params.get('data');
+    if (!encodedData) return null;
+
+    try {
+      const jsonStr = atob(decodeURIComponent(encodedData));
+      return JSON.parse(jsonStr);
+    } catch (e) {
+      console.error('Error decodificando data:', e);
+      return null;
+    }
+  }
+
+  // --- Cargar momento desde URL o fallback ---
+  const decodedMomentData = getDataFromUrl() || {
     img: 'recursos/images/sendo_banner.jpg',
     phrase: 'Respira y suelta todo el estrés.',
     author: 'SenDo',

@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Un Momento de SenDo para Ti</title>
 
-    <!-- Meta tags básicos -->
-    <meta property="og:title" content="Un Momento de SenDo para Ti" />
-    <meta property="og:description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+    <!-- Meta Tags -->
+    <title id="dynamic-title">Un Momento de SenDo para Ti</title>
+    <meta property="og:title" id="og-title" content="Un Momento de SenDo para Ti" />
+    <meta property="og:description" id="og-description" content="Abre este enlace para recibir una experiencia de calma y serenidad, creada y compartida desde SenDo." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="recursos/images/sendo_banner.jpg" />
+    <meta property="og:image" id="og-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="628" />
+    <meta property="og:site_name" content="SenDo" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Un Momento de SenDo para Ti" />
-    <meta name="twitter:description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
-    <meta name="twitter:image" content="recursos/images/sendo_banner.jpg" />
+    <meta name="twitter:title" id="twitter-title" content="Un Momento de SenDo para Ti" />
+    <meta name="twitter:description" id="twitter-description" content="Una experiencia de calma y serenidad, creada y compartida desde SenDo." />
+    <meta name="twitter:image" id="twitter-image" content="https://allacalle.github.io/sendo_moment_web/recursos/images/sendo_banner.jpg" />
 
+    <!-- CSS y Fonts -->
     <link rel="stylesheet" href="recursos/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@0;1&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Script principal -->
+    <script src="recursos/js/script.js" defer></script>
 </head>
+
 <body>
     <main id="moment-container">
         <div id="headphone-overlay" class="overlay">
@@ -52,7 +63,5 @@
         <div id="cta-text"><p>Esto es un Momento creado con <strong>SenDo</strong>, una app para encontrar tu calma diaria.</p></div>
         <div id="cta-button"><a id="download-link" href="#" target="_blank"><img src="recursos/images/googleplay.webp" alt="Obtener en Google Play"></a></div>
     </div>
-
-    <script src="recursos/js/script.js" defer></script>
 </body>
 </html>
